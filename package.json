@@ -4,6 +4,7 @@
   "main": "dist/force-n-body.cjs.js",
   "module": "dist/force-n-body.esm.js",
   "browser": "dist/force-n-body.umd.js",
+  "types": "src/index.d.ts",
   "dependencies": {
     "d3-quadtree": "^3.0.1"
   },
