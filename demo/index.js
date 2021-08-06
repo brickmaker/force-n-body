@@ -1,32 +1,70 @@
 const width = 800;
 const height = 800;
 const padding = 50;
-const N = 100;
 const vectorSizeScale = 5;
 
 const div = d3.select("body");
 const svg = div.append("svg").attr("width", width).attr("height", height);
+const title = div.append("h1").text("Force-N-Body Demo");
+const inputDiv = div.append("div");
+const timeShowDiv = div.append("div");
+const tips = div.append("div").append("p");
+tips.append("span").text("Tips: ");
+tips.append("span").text("Red arrow ").style("color", "red");
+tips.append("span").text("indicate forceNBody's result; ");
+tips.append("span").text("Blue arrow ").style("color", "blue");
+tips.append("span").text("indicate forceNBodyBruteForce's result.");
 
-const nodes = generateRandomData(N, width, height, padding);
+inputDiv.append("span").text("Node Num: ");
+inputDiv
+  .append("input")
+  .attr("placeholder", "100")
+  .on("keypress", function (e) {
+    if (e.keyCode == 13) {
+      main(parseInt(e.target.value));
+    }
+  });
 
-// const forces = mockForce(nodes);
-const forcesBruteForce = forceNBody.forceNBodyBruteForce(nodes);
-const forces = forceNBody.forceNBody(nodes);
-console.log(forcesBruteForce);
-console.log(forces);
+main(100);
 
-const node = svg
-  .selectAll("circle")
-  .data(nodes)
-  .enter()
-  .append("circle")
-  .attr("cx", (d) => d.x)
-  .attr("cy", (d) => d.y)
-  .attr("fill", "#67a9ef")
-  .attr("r", 5);
+function main(nodeNum) {
+  svg.selectAll("*").remove();
+  timeShowDiv.selectAll("*").remove();
 
-drawArrow(nodes, forcesBruteForce, "#0000ff", "bruteForce");
-drawArrow(nodes, forces, "#ff0000", "force");
+  const nodes = generateRandomData(nodeNum, width, height, padding);
+  drawNodes(nodes);
+
+  // const forces = mockForce(nodes);
+  const t0 = performance.now();
+  const forces = forceNBody.forceNBody(nodes);
+  const t1 = performance.now();
+  showTime(`forceNBody`, nodeNum, t1 - t0);
+  drawArrow(nodes, forces, "#ff0000", "force");
+
+  const t2 = performance.now();
+  const forcesBruteForce = forceNBody.forceNBodyBruteForce(nodes);
+  const t3 = performance.now();
+  showTime(`forceNBodyBruteForce`, nodeNum, t3 - t2);
+  drawArrow(nodes, forcesBruteForce, "#0000ff", "bruteForce");
+}
+
+function showTime(action, nodeNum, time) {
+  timeShowDiv
+    .append("p")
+    .text(`${action} spends ${parseInt(time)}ms computing ${nodeNum} nodes.`);
+}
+
+function drawNodes(nodes) {
+  const node = svg
+    .selectAll("circle")
+    .data(nodes)
+    .enter()
+    .append("circle")
+    .attr("cx", (d) => d.x)
+    .attr("cy", (d) => d.y)
+    .attr("fill", "#67a9ef")
+    .attr("r", 5);
+}
 
 function drawArrow(nodes, forces, color, className) {
   const combined = nodes.map((n, i) => ({
