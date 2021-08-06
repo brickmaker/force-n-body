@@ -1,6 +1,6 @@
 {
   "name": "force-n-body",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "main": "dist/force-n-body.cjs.js",
   "module": "dist/force-n-body.esm.js",
   "browser": "dist/force-n-body.umd.js",
