@@ -1,7 +1,9 @@
 import { quadtree } from "d3-quadtree";
-const defaultWeightFunc = () => 30;
 
-// TODO: 考虑整合，到一个对象里，目前先测试功能
+const defaultWeightFunc = () => 30;
+const theta2 = 0.81;
+const distanceMin2 = 1;
+const epsilon = 1e-6;
 
 function accumulate(quad) {
   let accWeight = 0;
@@ -31,10 +33,6 @@ function accumulate(quad) {
 }
 
 function computeForce(node, tree) {
-  const theta2 = 0.81;
-  const distanceMin2 = 1;
-  const epsilon = 1e-6;
-
   const apply = (quad, x1, y1, x2, y2) => {
     let dx = node.x - quad.x;
     let dy = node.y - quad.y;
@@ -43,7 +41,7 @@ function computeForce(node, tree) {
 
     // far node, apply Barnes-Hut approximation
     if ((width * width) / theta2 < len2) {
-    // if (false) {
+      // if (false) {
       // random jiggle
       if (dx === 0) dx = (Math.random() - 0.5) * epsilon;
       if (dy === 0) dy = (Math.random() - 0.5) * epsilon;
@@ -87,7 +85,7 @@ export function forceNBody(nodes, weightFunc = defaultWeightFunc) {
     (d) => d.y
   ).visitAfter(accumulate); // init internal node
 
-  data.forEach((n, i) => {
+  data.forEach((n) => {
     computeForce(n, tree);
   });
 
@@ -98,8 +96,6 @@ export function forceNBody(nodes, weightFunc = defaultWeightFunc) {
 }
 
 export function forceNBodyBruteForce(nodes, weightFunc = defaultWeightFunc) {
-  const distanceMin2 = 1;
-  const epsilon = 1e-6;
   const weights = Array(nodes.length)
     .fill()
     .map((_, i) => weightFunc(nodes[i], i));
