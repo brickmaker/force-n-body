@@ -2,7 +2,7 @@ const width = 800;
 const height = 800;
 const padding = 50;
 const N = 100;
-const vectorSizeScale = 10;
+const vectorSizeScale = 5;
 
 const div = d3.select("body");
 const svg = div.append("svg").attr("width", width).attr("height", height);
@@ -31,7 +31,9 @@ svg
 
 const nodes = generateRandomData(N, width, height, padding);
 
-const forces = mockForce(nodes);
+// const forces = mockForce(nodes);
+const forces = forceNBody.forceNBodyBruteForce(nodes);
+console.log(forces);
 
 const combined = nodes.map((n, i) => ({
   x: n.x,
