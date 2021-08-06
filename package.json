@@ -1,11 +1,11 @@
 {
-  "name": "rollup-starter-lib",
+  "name": "force-n-body",
   "version": "1.0.0",
-  "main": "dist/how-long-till-lunch.cjs.js",
-  "module": "dist/how-long-till-lunch.esm.js",
-  "browser": "dist/how-long-till-lunch.umd.js",
+  "main": "dist/force-n-body.cjs.js",
+  "module": "dist/force-n-body.esm.js",
+  "browser": "dist/force-n-body.umd.js",
   "dependencies": {
-    "ms": "^2.0.0"
+    "d3-quadtree": "^3.0.1"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^11.0.1",
